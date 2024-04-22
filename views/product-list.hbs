@@ -1,0 +1,98 @@
+<!-- Breadcrumb Start -->
+<div class="breadcrumb-wrap">
+  <div class="container">
+    <ul class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item"><a href="#">Products</a></li>
+      <li class="breadcrumb-item active">product list</li>
+    </ul>
+  </div>
+</div>
+<!-- Breadcrumb End -->
+
+<!-- Product List Start -->
+<div class="product-view">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="row">
+              <div class="col-md-8">
+                <div class="product-search">
+                  <form action="/products" method ="get">
+                  <input type="text" name="keyword" placeholder="Search" />
+                  <button><i class="fa fa-search"></i></button>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="product-short">
+                  <div class="dropdown">
+                    <a
+                      href="#"
+                      class="dropdown-toggle"
+                      data-toggle="dropdown"
+                    >Product sort by {{_sort}}</a>
+                    <div class="dropdown-menu dropdown-menu-right" id="sort">
+                      <a href="#" class="dropdown-item">Price</a>
+                      <a href="#" class="dropdown-item">Newest</a>
+                      <a href="#" class="dropdown-item">Popular</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{#each products}}
+          <div class="col-lg-4">
+            {{>product}}
+          </div>
+          {{/each}}
+        </div>
+
+        <div class="col-lg-12">
+          <nav aria-label="Page navigation example" id="pagination">
+            {{{paginateHelper pagination paginationClass="pagination justify-content-center" leftText="Previous" rightText="Next"}}}
+          </nav>
+        </div>
+      </div>
+
+      {{> right-column }}
+    </div>
+  </div>
+</div>
+<!-- Product List End -->
+
+<script>
+  function updateSortParams(sortValue) {
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('_sort', sortValue);
+    window.location.href = currentUrl.toString();
+  }
+
+  const sortButtons = document.getElementById("sort").childNodes;
+  for (let i = 0; i < sortButtons.length; i++) {
+    sortButtons[i].addEventListener("click", (event) => {
+      event.preventDefault();
+      updateSortParams(sortButtons[i].innerText.toLowerCase());
+    });
+  }
+
+  /*const paginateElement = document.querySelector(".pagination");
+  let listPageNumber = paginateElement.childNodes;
+  listPageNumber.forEach(p=> {
+    p.className = "page-item";
+    p.childNodes.forEach(x=> {
+      x.className = "page-link";
+    });
+  })*/
+
+  document.querySelectorAll("#pagination li").forEach((li) => {
+    li.classList.add("page-item");
+  })
+
+  document.querySelectorAll("#pagination a").forEach((a) => {
+    a.classList.add("page-link");
+  })
+</script>
